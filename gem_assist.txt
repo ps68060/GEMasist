@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Link
+Name=gem_assist.txt
+Icon=text-plain
+URL=smb://milan/tmp/tmp/gem_assist.txt
