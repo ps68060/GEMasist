@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<gentool>
+  <form type="config" path="test.cnf">
+    <object type="text" label="XaAES Config"/>
+    <object type="check" label="NAES Cookie" status="off">
+        <option value="naes_cookie = yes"/>
+    </object>
+
+    <object type="check" label="Use $Home in shell_find" status="off">
+        <option value="usehome = yes"/>
+    </object>
+
+    <object type="check" label="Gradients" status="off">
+        <option value="gradients = 1"/>
+    </object>
+
+    <object type="check" label="Swap mouse buttons" status="off">
+        <option value="lrmb_swap = yes"/>
+    </object>
+
+    <object type="radio" label="Menu behaviour">
+    	<button label="Pull"  value="menu = pull"/>
+    	<button label="Push"  value="menu = push" status="on"/>
+    	<button label="Leave" value="menu = leave"/>
+    </object>
+
+  </form>
+</gentool>

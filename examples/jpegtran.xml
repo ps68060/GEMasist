@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<gentool>
+  <form type="application" path="jpegtran">
+    <object type="text" label="JPEG Transformer"/>
+    <object type="check" label="details" status="off">
+        <option value="-l"/>
+    </object>
+    <object type="check" label="greyscale" status="off">
+        <option value="-grayscale"/>
+    </object>
+    <object type="check" label="flip horizontal" status="off">
+    	<option value="-flip horizontal"/>
+    </object>
+    <object type="check" label="flip vertical" status="off">
+    	<option value="-flip vertical"/>
+    </object>
+    <object type="check" label="rotate 90 (clockwise)" status="off">
+    	<option value="-rotate 90"/>
+    </object>
+    <object type="check" label="rotate 270 (anticlockwise)" status="off">
+    	<option value="-rotate 270"/>
+    </object>
+    <object type="file" label="Input file" status="input">
+        <option value=""/>
+    </object>
+    <object type="file" label="Output file" status="output">
+    </object>
+  </form>
+</gentool>

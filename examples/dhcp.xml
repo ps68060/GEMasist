@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<gentool>
+  <form type="application" path="/etc/rc.d/init.d/dhclient">
+    <object type="radio" label="dhcp">
+      <button label="start"   value="start"/>
+      <button label="stop"    value="stop"/>
+      <button label="status"  value="status" status="on"/>
+      <button label="restart" value="restart"/>
+    </object>
+  </form>
+</gentool>

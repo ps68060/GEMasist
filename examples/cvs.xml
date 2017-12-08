@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<gentool>
+  <form application="/usr/bin/cvs">
+    <object type="text" label="cvs document control"/>
+    <object type="check" label="details" status="off">
+        <option value="-l"/>
+    </object>
+    <object type="button" label="ok">
+    </object>
+    <object type="radio" label="Information">
+    	<button label="status" value="status" status="on"/>
+    	<button label="history" value="history"/>
+    	<button label="radio 3" value="R3"/>
+    	<button label="radio 4" value="R4"/>
+    </object>
+  </form>
+</gentool>

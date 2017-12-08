@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<gentool>
+  <form type="application" path="/bin/ls">
+    <object type="text" label="Hello"/>
+    <object type="check" label="details" status="off">
+        <option value="-l"/>
+    </object>
+    <object type="check" label="all" status="on">
+        <option value="-a"/>
+    </object>
+    <object type="check" label="sizes" status="off">
+    	<option value="-sh"/>
+    </object>
+    <object type="button" label="ok">
+    </object>
+    <object type="radio" label="radio grp">
+    	<button label="radio 1" value="R1"/>
+    	<button label="radio 2" value="R2" status="on"/>
+    	<button label="radio 3" value="R3"/>
+    	<button label="radio 4" value="R4"/>
+    </object>
+  </form>
+</gentool>
