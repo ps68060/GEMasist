@@ -1,5 +1,5 @@
 /*
- * GenTool - a simple application for commanding cli tools via GEM
+ * GEMasist - a simple application for commanding cli tools via GEM
  *           or for generating config files.
  *           It utilises a simple XML file to set-up the dialogue box.
  *
@@ -13,7 +13,7 @@
  * Supports:
  *		text		TextLabel
  *		check		CheckBox
- *		button	Button
+ *		button		Button
  *		radio		Radio Button Group
  *		file		File selector button
  */
@@ -293,7 +293,7 @@ void AddFselButton(  void *dial
 	aesObject = dfrm_new_button( dial, TYPE_XDBUT, obj_label);
 	dfrm_attach( dial, aesObject, BIND_FUNC, wFsel);						/* attach the button to the function  */
 	dfrm_add( dial, parent, aesObject, 0, -1, DIR_VERT);
-}  /* AddButton */
+}  /* AddFselButton */
 
 
 
