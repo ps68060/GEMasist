@@ -12,14 +12,21 @@ RM = rm -f
 
 #CPU = 68000
 #CPU = 68030
-CPU = 68040
-#CPU = 68020-60
+#CPU = 68040
+CPU = 68020-60
+#CPU = 5475
 
 DEFS = -DLIBDFRM
 
 OPTS = $(CPU:%=-m%) -funsigned-char \
        -fomit-frame-pointer -O2 -fstrength-reduce \
        -fno-strict-aliasing
+
+ifeq ($(CPU),5475)
+    OPTS = $(CPU:%=-mcpu=%) $(OPTFLAGS)
+else
+    OPTS = $(CPU:%=-m%) $(OPTFLAGS)
+endif
 
 WARN = \
 	###-Wall \
@@ -29,14 +36,18 @@ WARN = \
 	-Wcast-qual \
 	-Wimplicit-function-declaration  ###-Werror
 
-INCLUDE = -I/usr/GEM/include
+INCLUDE = -I/usr/GEM/include -I/usr/include
 
 CFLAGS = $(INCLUDE) $(WARN) $(OPTS) $(DEFS)
 ASFLAGS = $(OPTS)
 LDFLAGS = -Wl -t
-LIBS = -L/usr/GEM/lib -ldfrm -lwindom -lldg -lgem -lezxml
+LIBS = -L/usr/GEM/lib -ldfrm -lwindom -lldg -lgem -lezxml -L/usr/lib/m68020-60 -lezxml
 
-OBJDIR = obj$(CPU:68%=.%)
+ifeq ($(CPU),5475)
+    OBJDIR = obj.$(CPU)
+else
+    OBJDIR = obj$(CPU:68%=.%)
+endif
 
 #
 # C source files
@@ -73,6 +84,7 @@ $(TARGET): $(OBJS)
 030: ; $(MAKE) CPU=68030
 040: ; $(MAKE) CPU=68040
 060: ; $(MAKE) CPU=68020-60
+v4e: ; $(MAKE) CPU=5475
 
 clean:
 	rm -Rf *.bak */*.bak */*/*.bak *[%~] */*[%~] */*/*[%~]
