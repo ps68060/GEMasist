@@ -498,7 +498,7 @@ void main(int argc, char *argv[])
 	dfrm_align( dial, mainBox, DIR_VERT, ALIGN_CENTER);
 
 	dfrm_repack( dial);
-	win = dfrm_form( dial, WAT_FORM, "GenGEM", TRUE);		/* place the dialogue into a window */
+	win = dfrm_form( dial, WAT_FORM, "GEMasist", TRUE);		/* place the dialogue into a window */
 	EvntAttach( NULL, AP_TERM, ApTerm);
 	EvntAttach( NULL, WM_XBUTTON, RightButton);
 
