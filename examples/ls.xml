@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<gentool>
+  <form type="application" path="/bin/ls">
+    <object type="check" label="all" status="on">
+        <option value="-a"/>
+    </object>
+    <object type="check" label="details" status="off">
+        <option value="-l"/>
+    </object>
+    <object type="check" label="sizes" status="off">
+    	<option value="-sh"/>
+    </object>
+  </form>
+</gentool>
