@@ -1,5 +1,5 @@
 
-GEM Assist                                            25-Feb-2012     P. Slegg
+GEM Assist                                            16-Dec-2017     P. Slegg
 ==========
 
 
@@ -71,12 +71,21 @@ the command line. At least the syntax will be correct even if the logic isn't.
 Usage
 -----
 If you all ready have an XML file for your command line app then just
-drag&drop it onto the GEM Assist application. You can also create a
-file association in your desktop and launch it that way.
+drag&drop it onto the GEM Assist application.
 
-GEM Assist opens a dialogue, the content will depend on the XML file
-but there will be two buttons. One to cancel and the other to launch
-the command line utility with the settings you have chosen.
+Alternatively, can create a file association in your desktop and launch
+it that way or add the app to your desktop config and pass the
+path to the xml file.
+
+Run the GEM Assist as a GTP and you can open any suitable xml file.
+
+When launched, GEM Assist opens a dialogue, the content will depend on the
+XML file but there will be two buttons. One to cancel and the other to
+launch the command line utility with the settings you have chosen.
+
+If you are creating an xml file and need help, then adding the debug
+option (-d) when starting GEM Assist will print various messages to guide
+you.
 
 
 Examples
