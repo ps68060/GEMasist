@@ -24,6 +24,7 @@
 #include <ezxml.h>
 #include <mintbind.h>
 #include <time.h>
+#include <unistd.h>
 #include "gemasist.h"
 
 # define pexec(m,f,a,b)   Pexec (m, f, a, b)
@@ -435,6 +436,9 @@ void main(int argc, char *argv[])
 			,buttonbox
 			,mainBox;
 
+	int opt;
+	enum {NONDEBUG_MODE, DEBUG_MODE} mode = NONDEBUG_MODE;
+
 	ApplInit();																							/* WinDOm initialisation */
 
 	dial = dfrm_create( 20, TYPE_NORMAL);										/* Create the dialogue pointer */
@@ -444,15 +448,28 @@ void main(int argc, char *argv[])
 
 	debug_print("DEBUG: argc = %d\n", argc);
 
-	if (argc != 2)
+	while ((opt = getopt(argc, argv, "d")) != -1)
+	{
+		switch (opt)
+		{
+			case 'd' : mode = DEBUG_MODE; break;
+			default  : mode = NONDEBUG_MODE;
+		}
+	}  // while
+
+	DEBUG = mode;
+	printf("DEBUG has been set to %d\n", DEBUG);
+
+	debug_print("DEBUG: optind = %d\n", optind);
+	if (optind >= argc)
 	{
 		debug_print("DEBUG: Supply a .xml file\n");
 		aesObject = dfrm_new_label( dial, TYPE_LABEL, "Error: GenTool relies on a .xml file");
 		dfrm_add(   dial, parentBox, aesObject, 0, -1, DIR_VERT);				/* -4=two char widths from left border; -1=align with demi-height char */
 	}
-	if (argc == 2)
+	if (argc - optind == 1)
 	{
-		layout = ezxml_parse_file(argv[1]);											/* parse the xml file */
+		layout = ezxml_parse_file(argv[argc-1]);											/* parse the xml file */
 	  appName = addXmlObjects(dial, parentBox);								/* add xml objects to form */
 	  printf("app name = %s\n", appName);
 	}
