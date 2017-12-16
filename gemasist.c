@@ -37,6 +37,7 @@ struct a_buttonFunc
 };
 
 static int MaxStringLen = 200;
+static int MaxPathLen   = 256;
 
 ezxml_t layout;
 int 		radGrpCounter = 0
@@ -68,10 +69,10 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 
 		/* Build up the command parameters */
 		command = (char*)malloc(sizeof(char*) * MaxStringLen);
-		strncpy(command, " ", MaxStringLen);
+		strlcpy(command, " ", MaxStringLen);
 
-		strcat(command, appName);
-		strcat(command, " ");
+		strlcat(command, appName, MaxStringLen);
+		strlcat(command, " ", MaxStringLen);
 
 		debug_print("Number of Radio Groups=%d\n", radGrpCounter);
 
@@ -83,8 +84,8 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 			debug_print("  .index = %d\n" , parameters[x].index);
 			if (parameters[x].attach == 1)
 			{
-				strcat(command, parameters[x].param);
-				strcat(command, " ");
+				strlcat(command, parameters[x].param, MaxStringLen);
+				strlcat(command, " ", MaxStringLen);
 			}  /* if */
 		}  /* for */
 
@@ -93,13 +94,13 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
     {
 			/* Wrap filename in quotes  */
 			debug_print("DEBUG: Add filename to command\n");
-			strcat(command, quote);
-			strcat(command, filename);
-			strcat(command, quote);
+			strlcat(command, quote, MaxStringLen);
+			strlcat(command, filename, MaxStringLen);
+			strlcat(command, quote, MaxStringLen);
 		}
 
 
-	  debug_print("wCheck: [%s]\n", command);
+	  printf("Executing: [%s]\n", command);
 		system(command);    // pexec (0, appName, command, NULL);
 	}  /* if */
 
@@ -133,7 +134,7 @@ void makeConfig(char* appName)
 	{
 		fprintf(configFile, "# %s\n# Created by gentool %d/%d/%d\n#\n", appName, Day, Month, Year);
 		command = (char*)malloc(sizeof(char*) * MaxStringLen);
-		strncpy(command, " ", MaxStringLen);
+		strlcpy(command, " ", MaxStringLen);
 
 		printf("Number of Radio Groups=%d\n", radGrpCounter);
 
@@ -145,8 +146,8 @@ void makeConfig(char* appName)
 			printf("  .index = %d\n" , parameters[x].index);
 			if (parameters[x].attach == 1)
 			{
-				strncpy(command, parameters[x].param, MaxStringLen);
-				strcat(command, "\n");
+				strlcpy(command, parameters[x].param, MaxStringLen);
+				strlcat(command, "\n", MaxStringLen);
 				printf("Config line %d: %s\n", x, command);
 				fprintf(configFile, command);
 			}  /* if */
@@ -196,10 +197,10 @@ void AddCheckBox( void *dial
 
 	/* Get the "value" associated with the  check box */
 	Xml_option = ezxml_child(object, "option");
-	strcpy (parameter, ezxml_attr(Xml_option, "value"));
+	strlcpy (parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
 
 	parameters[paramCounter].param = (char*)malloc(sizeof(char*) * MaxStringLen);
-	strncpy(parameters[paramCounter].param, parameter, MaxStringLen);
+	strlcpy(parameters[paramCounter].param, parameter, MaxStringLen);
 	parameters[paramCounter].index = check_box;
 
 	debug_print("value=[%s]\n", parameters[paramCounter].param);
@@ -225,10 +226,10 @@ void AddRadioButtons( void   *dial
 		radioButtn = dfrm_new_button( dial, TYPE_XRBUT, ezxml_attr(xmlRadButton, "label") );
 
 		/* Get the "value" associated with the radio button */
-		strcpy (parameter, ezxml_attr(xmlRadButton, "value"));
+		strlcpy (parameter, ezxml_attr(xmlRadButton, "value"), MaxStringLen);
 
 		parameters[paramCounter].param = (char*)malloc(sizeof(char*) * MaxStringLen);
-		strncpy(parameters[paramCounter].param, parameter, MaxStringLen);
+		strlcpy(parameters[paramCounter].param, parameter, MaxStringLen);
 		parameters[paramCounter].index = radioButtn;
 
 		debug_print("value=[%s]\n", parameters[paramCounter].param);
@@ -404,12 +405,12 @@ void wFsel( WINDOW *win, int index)
 
 	if( FselInput(path, filename, "*.*", "View text file", NULL, NULL)) 
 	{
-		char fullname[256];
+		char fullname[MaxPathLen];
 
-		strcpy( fullname, path);
-		strcat( fullname, "\\");
-		strcat( fullname, filename);
-		strcpy(filename, fullname);
+		strlcpy( fullname, path, MaxPathLen);
+		strlcat( fullname, "\\", MaxPathLen);
+		strlcat( fullname, filename, MaxPathLen);
+		strlcpy( filename, fullname, MaxPathLen);
 
 		debug_print("DEBUG: filename = %s\n", filename);
 		return 1;
@@ -470,7 +471,7 @@ void main(int argc, char *argv[])
 	}
 	if (argc - optind == 1)
 	{
-		layout = ezxml_parse_file(argv[argc-1]);											/* parse the xml file */
+		layout = ezxml_parse_file(argv[argc-1]);								/* parse the xml file */
 	  appName = addXmlObjects(dial, parentBox);								/* add xml objects to form */
 	  printf("app name = %s\n", appName);
 	}
