@@ -73,14 +73,14 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 		strcat(command, appName);
 		strcat(command, " ");
 
-		printf("Number of Radio Groups=%d\n", radGrpCounter);
+		debug_print("Number of Radio Groups=%d\n", radGrpCounter);
 
 		for (x=0; x < paramCounter; x++)
 		{
-			printf("Parameter[%d]\n", x);
-			printf("  .attach = %d\n", parameters[x].attach);
-			printf("  .param = %s\n" , parameters[x].param);
-			printf("  .index = %d\n" , parameters[x].index);
+			debug_print("Parameter[%d]\n", x);
+			debug_print("  .attach = %d\n", parameters[x].attach);
+			debug_print("  .param = %s\n" , parameters[x].param);
+			debug_print("  .index = %d\n" , parameters[x].index);
 			if (parameters[x].attach == 1)
 			{
 				strcat(command, parameters[x].param);
@@ -99,7 +99,7 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 		}
 
 
-	  printf("wCheck: [%s]\n", command);
+	  debug_print("wCheck: [%s]\n", command);
 		system(command);    // pexec (0, appName, command, NULL);
 	}  /* if */
 
@@ -202,7 +202,7 @@ void AddCheckBox( void *dial
 	strncpy(parameters[paramCounter].param, parameter, MaxStringLen);
 	parameters[paramCounter].index = check_box;
 
-	printf("value=[%s]\n", parameters[paramCounter].param);
+	debug_print("value=[%s]\n", parameters[paramCounter].param);
 	paramCounter++;
 }  /* AddCheckBox */
 
@@ -231,17 +231,17 @@ void AddRadioButtons( void   *dial
 		strncpy(parameters[paramCounter].param, parameter, MaxStringLen);
 		parameters[paramCounter].index = radioButtn;
 
-		printf("value=[%s]\n", parameters[paramCounter].param);
+		debug_print("value=[%s]\n", parameters[paramCounter].param);
 
 		/* Select the required button */
 		if (strcmp(ezxml_attr(xmlRadButton,"status"), "on") == 0)
 		{
-			printf("  selected button ");
+			debug_print("  selected button ");
 			parameters[paramCounter].attach = 1;
 //			dfrm_setstate( dial, radioButtn, SELECTED, TRUE);
 		}
 
-		printf("radio_bttn=%d\n\n", radioButtn);
+		debug_print("radio_bttn=%d\n\n", radioButtn);
 		dfrm_attach( dial, radioButtn, BIND_VAR, &parameters[paramCounter].attach);						/* attach the button to a variable  */
 		dfrm_add( dial, radioGroup, radioButtn, 10, 10, DIR_VERT);
 		
@@ -319,7 +319,7 @@ char* addXmlObjects(void* dial, int parent)
 			i++;
 			obj_type   = ezxml_attr(object, "type");
 			obj_label  = ezxml_attr(object, "label");
-			printf("%d: type=%s label=%s status=%s \n"
+			debug_print("%d: type=%s label=%s status=%s \n"
 			      ,i
 			      ,obj_type
 			      ,obj_label
@@ -457,10 +457,11 @@ void main(int argc, char *argv[])
 		}
 	}  // while
 
-	DEBUG = mode;
-	printf("DEBUG has been set to %d\n", DEBUG);
-
 	debug_print("DEBUG: optind = %d\n", optind);
+
+	DEBUG = mode;
+	debug_print("DEBUG has been turned ON\n");
+
 	if (optind >= argc)
 	{
 		debug_print("DEBUG: Supply a .xml file\n");
