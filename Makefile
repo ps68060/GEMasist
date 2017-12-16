@@ -1,7 +1,7 @@
 #
 # Makefile for GEMAssist (gemasist)
 #
-TARGET = gemasist.app
+TARGET = gemasist.GTP
 
 # compiler settings
 CC = gcc #-DDEBUG
