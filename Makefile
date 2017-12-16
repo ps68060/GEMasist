@@ -65,7 +65,8 @@ $(OBJDIR)/%.o: %.c
 CFILES = \
 	 gemasist.c
 
-HDR = 
+HDR = \
+	gemasist.h
 
 SFILES = 
 

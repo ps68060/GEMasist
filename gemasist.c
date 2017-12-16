@@ -24,6 +24,7 @@
 #include <ezxml.h>
 #include <mintbind.h>
 #include <time.h>
+#include "gemasist.h"
 
 # define pexec(m,f,a,b)   Pexec (m, f, a, b)
 
@@ -56,8 +57,9 @@ ezxml_t layout;
 int 		radGrpCounter = 0
 			 ,checkBoxSelected[100]
 			 ,paramCounter
-			 ,config = FALSE
-			 ,debug = 1;
+			 ,config = FALSE;
+
+int			DEBUG = 1;																				/* 1 = debug on */
 
 struct a_buttonFunc parameters[200];
 char *params[200];
@@ -77,7 +79,7 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 		makeConfig(appName);
 	else
 	{
-		if (debug) printf ("Execute application\n");
+		debug_print("DEBUG: Execute application\n");
 
 		/* Build up the command parameters */
 		command = (char*)malloc(sizeof(char*) * MaxStringLen);
@@ -105,7 +107,7 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
     if (strlen(filename) > 0)
     {
 			/* Wrap filename in quotes  */
-			if (debug) printf ("Add filename to command\n");
+			debug_print("DEBUG: Add filename to command\n");
 			strcat(command, quote);
 			strcat(command, filename);
 			strcat(command, quote);
@@ -424,8 +426,7 @@ void wFsel( WINDOW *win, int index)
 		strcat( fullname, filename);
 		strcpy(filename, fullname);
 
-		if (debug)
-			printf("filename = %s\n", filename);
+		debug_print("DEBUG: filename = %s\n", filename);
 		return 1;
 	}
 	else
@@ -457,10 +458,11 @@ void main(int argc, char *argv[])
 	/* 1. Create an Invisible BOX for the xml objects */
 	parentBox = dfrm_new_box( dial, 0, 0, 0, 0);
 
-	printf("argc = %d\n", argc);
+	debug_print("DEBUG: argc = %d\n", argc);
+
 	if (argc != 2)
 	{
-		if (debug) printf("Supply a .xml file\n");
+		debug_print("DEBUG: Supply a .xml file\n");
 		aesObject = dfrm_new_label( dial, TYPE_LABEL, "Error: GenTool relies on a .xml file");
 		dfrm_add(   dial, parentBox, aesObject, 0, -1, DIR_VERT);				/* -4=two char widths from left border; -1=align with demi-height char */
 	}
