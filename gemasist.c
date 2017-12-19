@@ -132,7 +132,7 @@ void makeConfig(char* appName)
 	}
 	else
 	{
-		fprintf(configFile, "# %s\n# Created by gentool %d/%d/%d\n#\n", appName, Day, Month, Year);
+		fprintf(configFile, "# %s\n# Created by GEMasist %d/%d/%d\n#\n", appName, Day, Month, Year);
 		command = (char*)malloc(sizeof(char*) * MaxStringLen);
 		strlcpy(command, " ", MaxStringLen);
 
@@ -466,7 +466,7 @@ void main(int argc, char *argv[])
 	if (optind >= argc)
 	{
 		debug_print("DEBUG: Supply a .xml file\n");
-		aesObject = dfrm_new_label( dial, TYPE_LABEL, "Error: GenTool relies on a .xml file");
+		aesObject = dfrm_new_label( dial, TYPE_LABEL, "Error: GEMasist relies on a .xml file");
 		dfrm_add(   dial, parentBox, aesObject, 0, -1, DIR_VERT);				/* -4=two char widths from left border; -1=align with demi-height char */
 	}
 	if (argc - optind == 1)
