@@ -110,11 +110,12 @@ void makeConfig(char* appName)
 {
 	const char pathName[] = "afile.cnf";
 	FILE *configFile;
-	int	x;
+	int  aesObject
+	    ,x;
 	char *command;
 	struct tm *Sys_T = NULL;   /* date time */
 
-	printf("Make config file\n");
+	debug_print("Make config file\n");
 
 	time_t Tval = 0;
 	Tval = time(NULL);
@@ -128,7 +129,9 @@ void makeConfig(char* appName)
 	configFile = fopen(appName, "w");
 	if (configFile == NULL)
 	{
-		printf("ERROR: Can't open the output config file!\n");
+		debug_print("ERROR: Can't open the output config file!\n");
+		aesObject = dfrm_new_label( dial, TYPE_LABEL, "Error: Cannot open the output config file!");
+		dfrm_add(   dial, parentBox, aesObject, 0, -1, DIR_VERT);				/* -4=two char widths from left border; -1=align with demi-height char */
 	}
 	else
 	{
@@ -136,19 +139,19 @@ void makeConfig(char* appName)
 		command = (char*)malloc(sizeof(char*) * MaxStringLen);
 		strlcpy(command, " ", MaxStringLen);
 
-		printf("Number of Radio Groups=%d\n", radGrpCounter);
+		debug_print("Number of Radio Groups=%d\n", radGrpCounter);
 
 		for (x=0; x < paramCounter; x++)
 		{
-			printf("Parameter[%d]\n", x);
-			printf("  .attach = %d\n", parameters[x].attach);
-			printf("  .param = %s\n" , parameters[x].param);
-			printf("  .index = %d\n" , parameters[x].index);
+			debug_print("Parameter[%d]\n", x);
+			debug_print("  .attach = %d\n", parameters[x].attach);
+			debug_print("  .param = %s\n" , parameters[x].param);
+			debug_print("  .index = %d\n" , parameters[x].index);
 			if (parameters[x].attach == 1)
 			{
 				strlcpy(command, parameters[x].param, MaxStringLen);
 				strlcat(command, "\n", MaxStringLen);
-				printf("Config line %d: %s\n", x, command);
+				debug_print("Config line %d: %s\n", x, command);
 				fprintf(configFile, command);
 			}  /* if */
 		}  /* for */
