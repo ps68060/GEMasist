@@ -132,19 +132,9 @@ void makeConfig(char* appName)
 	int  aesObject
 	    ,x;
 	char *command;
-	struct tm *Sys_T = NULL;   /* date time */
 	char sysDate[12];
 
 	debug_print("Make config file\n");
-
-	time_t Tval = 0;
-	Tval = time(NULL);
-	Sys_T = localtime(&Tval);
-	int Day, Month, Year;
-
-	Day = Sys_T->tm_mday;
-	Month = Sys_T->tm_mon + 1;
-	Year = 1900 + Sys_T->tm_year;
 
 	getSysDate(sysDate);
 	debug_print("Sys date is %s\n", sysDate);
@@ -158,7 +148,7 @@ void makeConfig(char* appName)
 	}
 	else
 	{
-		fprintf(configFile, "# %s\n# Created by GEMasist %d/%d/%d\n#\n", appName, Day, Month, Year);
+		fprintf(configFile, "# %s\n# Created by GEMasist %s\n#\n", appName, sysDate);
 		command = (char*)malloc(sizeof(char*) * MaxStringLen);
 		strlcpy(command, " ", MaxStringLen);
 
