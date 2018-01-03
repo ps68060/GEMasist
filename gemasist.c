@@ -121,7 +121,6 @@ void getSysDate(char *dateS)
 	Month = Sys_T->tm_mon + 1;
 	Year  = 1900 + Sys_T->tm_year;
 
-	dateS = (char*)malloc(sizeof(char*) * MaxStringLen);
 	sprintf(dateS, "%d/%d/%d", Day, Month, Year);
 } /* getSysDate */
 
@@ -134,6 +133,7 @@ void makeConfig(char* appName)
 	    ,x;
 	char *command;
 	struct tm *Sys_T = NULL;   /* date time */
+	char sysDate[12];
 
 	debug_print("Make config file\n");
 
@@ -145,6 +145,9 @@ void makeConfig(char* appName)
 	Day = Sys_T->tm_mday;
 	Month = Sys_T->tm_mon + 1;
 	Year = 1900 + Sys_T->tm_year;
+
+	getSysDate(sysDate);
+	debug_print("Sys date is %s\n", sysDate);
 
 	configFile = fopen(appName, "w");
 	if (configFile == NULL)
