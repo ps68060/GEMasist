@@ -106,36 +106,16 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 
 }  /* wCheck */
 
-
-void getSysDate(char *dateS)
-{
-	struct tm *Sys_T = NULL;   /* date time */
-	char *dateS;
-
-	time_t Tval = 0;
-	Tval = time(NULL);
-	Sys_T = localtime(&Tval);
-
-	int Day, Month, Year;
-
-	Day   = Sys_T->tm_mday;
-	Month = Sys_T->tm_mon + 1;
-	Year  = 1900 + Sys_T->tm_year;
-
-	dateS = (char*)malloc(sizeof(char*) * MaxStringLen);
-	sprintf(dateS, "%d/%d/%d", Day, Month, Year);
-}  /* getSysDate */
-
-
 void makeConfig(char* appName)
 {
-	const  char pathName[] = "afile.cnf";
-	FILE   *configFile;
-	int    aesObject
-	      ,x;
-	char   *command;
+	const char pathName[] = "afile.cnf";
+	FILE *configFile;
+	int  aesObject
+	    ,x;
+	char *command;
 	struct tm *Sys_T = NULL;   /* date time */
-	char   sysDate[12];          /* 12 bytes allocated on the stack */
+
+	debug_print("Make config file\n");
 
 	time_t Tval = 0;
 	Tval = time(NULL);
@@ -146,16 +126,12 @@ void makeConfig(char* appName)
 	Month = Sys_T->tm_mon + 1;
 	Year = 1900 + Sys_T->tm_year;
 
-	getSysDate(sysDate);
-
-	debug_print("Make config file\n");
-
 	configFile = fopen(appName, "w");
 	if (configFile == NULL)
 	{
 		debug_print("ERROR: Can't open the output config file!\n");
-		aesObject = dfrm_new_label( dial, TYPE_LABEL, "Error: Cannot open the output config file!");
-		dfrm_add(   dial, parentBox, aesObject, 0, -1, DIR_VERT);				/* -4=two char widths from left border; -1=align with demi-height char */
+		/*aesObject = dfrm_new_label( dial, TYPE_LABEL, "Error: Cannot open the output config file!"); */
+		/*dfrm_add(   dial, parentBox, aesObject, 0, -1, DIR_VERT);				/* -4=two char widths from left border; -1=align with demi-height char */
 	}
 	else
 	{
@@ -182,10 +158,9 @@ void makeConfig(char* appName)
 	}  /* if */
 
 	fclose(configFile);
-}  /* makeConfig */
+}
 
 /*****************************************************************************/
-
 void AddTextLabel( void *dial
 									,int parent
 									,char *obj_label)
