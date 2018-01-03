@@ -106,6 +106,27 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 
 }  /* wCheck */
 
+
+void getSysDate(char *dateS)
+{
+	struct tm *Sys_T = NULL;   /* date time */
+	char *dateS;
+
+	time_t Tval = 0;
+	Tval = time(NULL);
+	Sys_T = localtime(&Tval);
+
+	int Day, Month, Year;
+
+	Day   = Sys_T->tm_mday;
+	Month = Sys_T->tm_mon + 1;
+	Year  = 1900 + Sys_T->tm_year;
+
+	dateS = (char*)malloc(sizeof(char*) * MaxStringLen);
+	sprintf(dateS, "%d/%d/%d", Day, Month, Year);
+} /* getSysDate */
+
+
 void makeConfig(char* appName)
 {
 	const char pathName[] = "afile.cnf";
