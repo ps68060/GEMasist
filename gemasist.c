@@ -110,7 +110,6 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 void getSysDate(char *dateS)
 {
 	struct tm *Sys_T = NULL;   /* date time */
-	char *dateS;
 
 	time_t Tval = 0;
 	Tval = time(NULL);
