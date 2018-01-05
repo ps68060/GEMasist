@@ -1,7 +1,7 @@
 /*
 This file is part of GEMasist.
 
-    Foobar is free software: you can redistribute it and/or modify
+    GEMasist is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -12,7 +12,7 @@ This file is part of GEMasist.
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with GEMasist.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
