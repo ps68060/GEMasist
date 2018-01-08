@@ -50,6 +50,7 @@ struct a_buttonFunc
 	int  attach;
 	int  index;
 	char *param;
+	char *filename[256];
 };
 
 static int MaxStringLen = 200;
