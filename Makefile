@@ -4,7 +4,7 @@
 TARGET = gemasist.GTP
 
 # compiler settings
-CC = gcc #-DDEBUG
+CC = gcc -DDEBUG
 AS = $(CC) -c
 LD = $(CC) 
 CP = cp
@@ -63,7 +63,8 @@ $(OBJDIR)/%.o: %.c
 # files
 #
 CFILES = \
-	 gemasist.c
+	 gemasist.c \
+	 DateUtils.c
 
 HDR = \
 	gemasist.h
