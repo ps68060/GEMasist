@@ -33,6 +33,7 @@ This file is part of GEMasist.
     along with GEMasist.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 #include <stdlib.h>
 #include <string.h>
 #include <windom.h>
@@ -42,16 +43,9 @@ This file is part of GEMasist.
 #include <time.h>
 #include <unistd.h>
 #include "gemasist.h"
+#include "DateUtils.h"
 
 # define pexec(m,f,a,b)   Pexec (m, f, a, b)
-
-struct a_buttonFunc
-{
-	int  attach;
-	int  index;
-	char *param;
-	char *filename[256];
-};
 
 static int MaxStringLen = 200;
 static int MaxPathLen   = 256;
@@ -62,11 +56,11 @@ int 		radGrpCounter = 0
 			 ,paramCounter
 			 ,config = FALSE;
 
-int			DEBUG = 1;																				/* 1 = debug on */
+int			DEBUG_ME = 1;																				/* 1 = debug on */
 
 struct a_buttonFunc parameters[200];
-char *params[200];
-char *filename[256];
+
+//char *filename[256];
 
 
 void wCheck(WINDOW *win, int index, int mode, char* appName)
@@ -107,13 +101,13 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 		}  /* for */
 
 
-    if (strlen(filename) > 0)
+    if (strlen(parameters[x].filename) > 0)
     {
 			/* Wrap filename in quotes  */
 			debug_print("DEBUG: Add filename to command\n");
-			strlcat(command, quote, MaxStringLen);
-			strlcat(command, filename, MaxStringLen);
-			strlcat(command, quote, MaxStringLen);
+			strlcat(command, quote,    MaxStringLen);
+			strlcat(command, parameters[x].filename, MaxStringLen);
+			strlcat(command, quote,    MaxStringLen);
 		}
 
 
@@ -124,22 +118,14 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 }  /* wCheck */
 
 
-void getSysDate(char *dateS)
+void wClose(	WINDOW *win
+						, int    index)
 {
-	struct tm *Sys_T = NULL;   /* date time */
-
-	time_t Tval = 0;
-	Tval = time(NULL);
-	Sys_T = localtime(&Tval);
-
-	int Day, Month, Year;
-
-	Day   = Sys_T->tm_mday;
-	Month = Sys_T->tm_mon + 1;
-	Year  = 1900 + Sys_T->tm_year;
-
-	sprintf(dateS, "%d/%d/%d", Day, Month, Year);
-} /* getSysDate */
+	ezxml_free(layout);
+	BubbleFree();
+	ObjcChange( OC_FORM, win, index, NORMAL, TRUE);
+	ApplWrite( _AESapid, AP_TERM, 0, 0, 0, 0, 0);
+}  // wClose
 
 
 void makeConfig(char* appName)
@@ -190,9 +176,10 @@ void makeConfig(char* appName)
 	fclose(configFile);
 }
 
+
 /*****************************************************************************/
 void AddTextLabel( void *dial
-									,int parent
+									,int  parent
 									,char *obj_label)
 {
   int aesObject;
@@ -203,15 +190,16 @@ void AddTextLabel( void *dial
 }  /* AddTextLabel */
 
 
-void AddCheckBox( void *dial
-								,int parent
-								,ezxml_t object
-								,char *obj_label)
+void AddCheckBox( void    *dial
+                , int     parent
+                , ezxml_t object
+                , char    *obj_label
+                )
 {
-	int	 check_box;
+	int	    check_box;
 	ezxml_t Xml_option;
-	char *obj_status;
-	char *parameter[MaxStringLen];
+	char    *obj_status;
+	char    *parameter[MaxStringLen];
 
 	obj_status = ezxml_attr(object, "status");
 
@@ -222,13 +210,13 @@ void AddCheckBox( void *dial
 	check_box = dfrm_new_button( dial, TYPE_XSBUT, obj_label);
 
 	/* Select the required box */
-	if (strcmp(ezxml_attr(object,"status"), "on") == 0)
+	if (strcmp(obj_status, "on") == 0)
 			parameters[paramCounter].attach = 1;
 
 	dfrm_attach( dial, check_box, BIND_VAR, &parameters[paramCounter].attach);	/* attach the button to a variable  */
 	dfrm_add( dial, parent, check_box, 0, -1, DIR_VERT);				/* 3. horizontaly aligned in invisible box */
 
-	/* Get the "value" associated with the  check box */
+	/* Get the "value" associated with the check box */
 	Xml_option = ezxml_child(object, "option");
 	strlcpy (parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
 
@@ -237,6 +225,16 @@ void AddCheckBox( void *dial
 	parameters[paramCounter].index = check_box;
 
 	debug_print("value=[%s]\n", parameters[paramCounter].param);
+
+
+	/* Get the "filename" associated with the  check box */
+	Xml_option = ezxml_child(object, "filename");
+	if (Xml_option)
+	{
+		strlcpy (parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
+		AddFselButton(dial, parent, obj_label);
+	}
+
 	paramCounter++;
 }  /* AddCheckBox */
 
@@ -249,7 +247,7 @@ void AddRadioButtons( void   *dial
 	int  radioGroup
 			,radioButtn;
 	ezxml_t  xmlRadButton;
-	char *parameter[20];
+	char *parameter[30];
 
 	radioGroup = dfrm_new_tbox( dial, 0, 0, obj_label);			/* create a radio group */
 
@@ -290,7 +288,7 @@ void AddRadioButtons( void   *dial
 
 
 void AddButton(  void *dial
-								,int parent
+								,int  parent
 								,char *obj_label)
 {
 	int aesObject;
@@ -304,21 +302,26 @@ void AddButton(  void *dial
 
 
 void AddFselButton(  void *dial
-										,int parent
+										,int  parent
 										,char *obj_label)
 {
 	int aesObject;
-	char *parameter[20];
 
-//	printf("File selector BUTTON label=%s\n" ,obj_label );
+	debug_print("File selector BUTTON label=%s\n" ,obj_label );
 	aesObject = dfrm_new_button( dial, TYPE_XDBUT, obj_label);
-	dfrm_attach( dial, aesObject, BIND_FUNC, wFsel);						/* attach the button to the function  */
+
+	dfrm_attach( dial, aesObject, BIND_FUNC, wFsel, parameters[paramCounter].filename);						/* attach the button to the function  */
 	dfrm_add( dial, parent, aesObject, 0, -1, DIR_VERT);
+
+	parameters[paramCounter].filename = (char*)malloc(sizeof(char*) * MaxPathLen);
+	parameters[paramCounter].index    = aesObject;
+
 }  /* AddFselButton */
 
 
 
-char* addXmlObjects(void* dial, int parent)
+char* addXmlObjects(	void *dial
+										, int   parent)
 {/* add xml objects to form */
 	int i=0;
 
@@ -326,11 +329,13 @@ char* addXmlObjects(void* dial, int parent)
 	       ,object;
 
 	char *formType
-			,*appName
-	    ,*obj_type
-	    ,*obj_label
 	    ,*obj_status
-	    ,*obj_config;
+	    ,*obj_config
+	    ,*obj_label;
+
+	const char *appName
+						,*obj_type
+						;
 
 //	printf("addXmlObjects\n");
 
@@ -378,7 +383,6 @@ char* addXmlObjects(void* dial, int parent)
 			else if ( strcmp(obj_type,"file") == 0)										/* File selector button */
 			{
 				AddFselButton(dial, parent, obj_label);
-//				AddTextLabel(dial, parent, obj_label);
 			}
 
 
@@ -394,7 +398,7 @@ char* addXmlObjects(void* dial, int parent)
 }  /* addXmlObjects */
 
 
-void ApTerm(void)
+int ApTerm(	void)
 {
 //	printf("in ApTerm:1\n");
 	/* catch the AP_TERM message (application termination) */
@@ -408,42 +412,24 @@ void ApTerm(void)
 }
 
 
-void wclose( WINDOW *win, int index)
-{
-	ezxml_free(layout);
-	BubbleFree();
-	ObjcChange( OC_FORM, win, index, NORMAL, TRUE);
-	ApplWrite( _AESapid, AP_TERM, 0, 0, 0, 0, 0);
-}
-
-
-void winfo( WINDOW *win, int index)
-{
-	FormAlert( 1, 
-		"[1][Compiled using|WinDom v%x.%02x"
-		"|DFRM v%x.%02x][OK]", 
-		WinDom.patchlevel >> 8 ,
-		WinDom.patchlevel & 0x00FF,
-		__DFRM_MAJOR__,__DFRM_MINOR__);
-
-	ObjcChange( OC_FORM, win, index, NORMAL, TRUE);
-}
-
-
-void wFsel( WINDOW *win, int index)
+int wFsel(		WINDOW *win
+					,		int index, char *filename)
 /** Purpose: When the fileselector is called, get the filename and return it.
  */
 {
-	static char path[255] = ""; // First usage : current directory
+	static char path[256] = ""; // First usage : current directory
 
 	if( FselInput(path, filename, "*.*", "View text file", NULL, NULL)) 
 	{
-		char fullname[MaxPathLen];
+		char fullname[256] = "";
 
 		strlcpy( fullname, path, MaxPathLen);
 		strlcat( fullname, "\\", MaxPathLen);
 		strlcat( fullname, filename, MaxPathLen);
-		strlcpy( filename, fullname, MaxPathLen);
+		strlcpy( parameters[paramCounter].filename, fullname, MaxPathLen);
+
+//		snprintf(fullname, "%s\\%s", path, filename);
+		printf("[%s\\%s]\n", path, filename);
 
 		debug_print("DEBUG: filename = %s\n", filename);
 		return 1;
@@ -475,7 +461,7 @@ void main(int argc, char *argv[])
 
 	ApplInit();																							/* WinDOm initialisation */
 
-	dial = dfrm_create( 20, TYPE_NORMAL);										/* Create the dialogue pointer */
+	dial = dfrm_create( 40, TYPE_NORMAL);										/* Create the dialogue pointer */
 
 	/* 1. Create an Invisible BOX for the xml objects */
 	parentBox = dfrm_new_box( dial, 0, 0, 0, 0);
@@ -493,7 +479,7 @@ void main(int argc, char *argv[])
 
 	debug_print("DEBUG: optind = %d\n", optind);
 
-	DEBUG = mode;
+	DEBUG_ME = mode;
 	debug_print("DEBUG has been turned ON\n");
 
 	if (optind >= argc)
@@ -514,12 +500,12 @@ void main(int argc, char *argv[])
 
 	/* 2. create button 1 */
 	aesObject = dfrm_new_button( dial, TYPE_XDBUT, "[Apply");
-	dfrm_attach( dial, aesObject, BIND_FUNC, wCheck, appName);	/* attach the button to the wCheck function */
+	dfrm_attach( dial, aesObject, BIND_FUNC, wCheck, appName);	/* attach the APPLY button to the wCheck function */
 	dfrm_add( dial, buttonbox, aesObject, 0, -1, DIR_HORI);			/* horizontaly aligned in invisible box */
 
 	/* create button 2 */
 	aesObject = dfrm_new_button( dial, TYPE_XEBUT, "[Exit");
-	dfrm_attach( dial, aesObject, BIND_FUNC, wclose);						/* attach the button to the function  */
+	dfrm_attach( dial, aesObject, BIND_FUNC, wClose);						/* attach the EXIT button to the wClose function  */
 	dfrm_add( dial, buttonbox, aesObject, -4, -1, DIR_HORI);
 
 	BubbleAttach (dial, aesObject, "bubble help success");
