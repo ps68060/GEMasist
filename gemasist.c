@@ -196,9 +196,10 @@ void AddCheckBox( void    *dial
                 , char    *obj_label
                 )
 {
+	const char    *obj_status;
+
 	int	    check_box;
 	ezxml_t Xml_option;
-	char    *obj_status;
 	char    *parameter[MaxStringLen];
 
 	obj_status = ezxml_attr(object, "status");
@@ -320,22 +321,23 @@ void AddFselButton(  void *dial
 
 
 
-char* addXmlObjects(	void *dial
+const char* addXmlObjects(	void *dial
 										, int   parent)
 {/* add xml objects to form */
+
+	const char *formType
+						,*obj_label
+						,*appName
+						,*obj_type;
+
 	int i=0;
 
 	ezxml_t form
 	       ,object;
 
-	char *formType
-	    ,*obj_status
-	    ,*obj_config
-	    ,*obj_label;
+	char *obj_status
+	    ,*obj_config;
 
-	const char *appName
-						,*obj_type
-						;
 
 //	printf("addXmlObjects\n");
 
