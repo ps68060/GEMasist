@@ -18,8 +18,11 @@ CPU = 68020-60
 
 DEFS = -DLIBDFRM
 
-OPTS = $(CPU:%=-m%) -funsigned-char \
-       -fomit-frame-pointer -O2 -fstrength-reduce \
+OPTS = $(CPU:%=-m%) \
+       -funsigned-char \
+       -fomit-frame-pointer \
+       -O2 \
+       -fstrength-reduce \
        -fno-strict-aliasing
 
 ifeq ($(CPU),5475)
@@ -64,10 +67,13 @@ $(OBJDIR)/%.o: %.c
 #
 CFILES = \
 	 gemasist.c \
-	 DateUtils.c
+	 DateUtils.c \
+	 DfrmGEMasist.c
 
 HDR = \
-	gemasist.h
+	gemasist.h \
+	DateUtils.h \
+	DfrmGEMasist.h
 
 SFILES = 
 

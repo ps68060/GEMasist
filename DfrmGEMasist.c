@@ -20,12 +20,19 @@ This file is part of GEMasist.
 
 */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <windom.h>
 #include <windom/dfrm.h>
+#include <ezxml.h>
 #include "DateUtils.h"
+#include "DfrmGEMasist.h"
+#include "gemasist.h"
 
-void winfo(		WINDOW *win
-					,		int    index)
+static int MaxPathLen   = 256;
+
+void winfo( WINDOW *win
+					, int    index)
 {
   char sysDate[12];
 
@@ -43,4 +50,32 @@ void winfo(		WINDOW *win
 	ObjcChange( OC_FORM, win, index, NORMAL, TRUE);
 }  // wInfo
 
+
+int wFsel(  WINDOW *win
+          , int    index
+          , char   *filename)
+/** Purpose: When the fileselector is called, get the filename and return it.
+ */
+{
+  static char path[256] = ""; // First usage : current directory
+
+  if( FselInput(path, filename, "*.*", "View text file", NULL, NULL)) 
+  {
+    char fullname[256] = "";
+
+    strlcpy( fullname, path, MaxPathLen);
+    strlcat( fullname, "\\", MaxPathLen);
+    strlcat( fullname, filename, MaxPathLen);
+//    strlcpy( parameters[paramCounter].filename, fullname, MaxPathLen);
+    strlcpy( filename, fullname, MaxPathLen);
+
+//    snprintf(fullname, "%s\\%s", path, filename);
+    printf("[%s\\%s]\n", path, filename);
+
+    debug_print("DEBUG: filename = %s\n", filename);
+    return 1;
+  }
+  else
+    return 0;  // error
+}  // wFsel
 

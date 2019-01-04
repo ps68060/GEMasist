@@ -16,6 +16,8 @@ This file is part of GEMasist.
 
 */
 
+extern int  DEBUG_ME;																				/* 1 = debug on */
+
 #define debug_print(fmt, ...) \
   do { if (DEBUG_ME) fprintf(stderr, fmt, ##__VA_ARGS__); } while (0)
 
@@ -31,10 +33,8 @@ struct a_buttonFunc
 
 int  ApTerm( void);
 
-void winfo(  WINDOW *win, int index);
 void wclose( WINDOW *win, int index);
 void wCheck( WINDOW *win, int index, int mode, char* appName);
-int  wFsel(  WINDOW *win, int index, char *filename);
 
 void makeConfig(char* appName);
 
@@ -50,8 +50,8 @@ void AddFselButton(  void *dial
 										,int  parent
 										,char *obj_label);
 
-void AddRadioButtons( void *dial, int parent, ezxml_t object, char *obj_label);
+void AddRadioButtons( void *dial, int parent, ezxml_t object, const char *obj_label);
 
 void AddButton(       void *dial, int parent, char *obj_label);
 
-void RightButton(void);
+func_evnt RightButton(void);

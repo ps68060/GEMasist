@@ -42,8 +42,9 @@ This file is part of GEMasist.
 #include <mintbind.h>
 #include <time.h>
 #include <unistd.h>
-#include "gemasist.h"
 #include "DateUtils.h"
+#include "DfrmGEMasist.h"
+#include "gemasist.h"
 
 # define pexec(m,f,a,b)   Pexec (m, f, a, b)
 
@@ -56,7 +57,11 @@ int 		radGrpCounter = 0
 			 ,paramCounter
 			 ,config = FALSE;
 
-int			DEBUG_ME = 1;																				/* 1 = debug on */
+int DEBUG_ME = 1;                                /* extern */
+
+#define debug_print(fmt, ...) \
+  do { if (DEBUG_ME) fprintf(stderr, fmt, ##__VA_ARGS__); } while (0)
+
 
 struct a_buttonFunc parameters[200];
 
@@ -219,10 +224,10 @@ void AddCheckBox( void    *dial
 
 	/* Get the "value" associated with the check box */
 	Xml_option = ezxml_child(object, "option");
-	strlcpy (parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
+	strlcpy (*parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
 
 	parameters[paramCounter].param = (char*)malloc(sizeof(char*) * MaxStringLen);
-	strlcpy(parameters[paramCounter].param, parameter, MaxStringLen);
+	strlcpy(parameters[paramCounter].param, *parameter, MaxStringLen);
 	parameters[paramCounter].index = check_box;
 
 	debug_print("value=[%s]\n", parameters[paramCounter].param);
@@ -232,7 +237,7 @@ void AddCheckBox( void    *dial
 	Xml_option = ezxml_child(object, "filename");
 	if (Xml_option)
 	{
-		strlcpy (parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
+		strlcpy (*parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
 		AddFselButton(dial, parent, obj_label);
 	}
 
@@ -243,7 +248,7 @@ void AddCheckBox( void    *dial
 void AddRadioButtons( void   *dial
 										,int     parent
 										,ezxml_t object
-										,char    *obj_label)
+										,const char    *obj_label)
 {
 	int  radioGroup
 			,radioButtn;
@@ -258,10 +263,10 @@ void AddRadioButtons( void   *dial
 		radioButtn = dfrm_new_button( dial, TYPE_XRBUT, ezxml_attr(xmlRadButton, "label") );
 
 		/* Get the "value" associated with the radio button */
-		strlcpy (parameter, ezxml_attr(xmlRadButton, "value"), MaxStringLen);
+		strlcpy (*parameter, ezxml_attr(xmlRadButton, "value"), MaxStringLen);
 
 		parameters[paramCounter].param = (char*)malloc(sizeof(char*) * MaxStringLen);
-		strlcpy(parameters[paramCounter].param, parameter, MaxStringLen);
+		strlcpy(parameters[paramCounter].param, *parameter, MaxStringLen);
 		parameters[paramCounter].index = radioButtn;
 
 		debug_print("value=[%s]\n", parameters[paramCounter].param);
@@ -414,34 +419,7 @@ int ApTerm(	void)
 }
 
 
-int wFsel(		WINDOW *win
-					,		int index, char *filename)
-/** Purpose: When the fileselector is called, get the filename and return it.
- */
-{
-	static char path[256] = ""; // First usage : current directory
-
-	if( FselInput(path, filename, "*.*", "View text file", NULL, NULL)) 
-	{
-		char fullname[256] = "";
-
-		strlcpy( fullname, path, MaxPathLen);
-		strlcat( fullname, "\\", MaxPathLen);
-		strlcat( fullname, filename, MaxPathLen);
-		strlcpy( parameters[paramCounter].filename, fullname, MaxPathLen);
-
-//		snprintf(fullname, "%s\\%s", path, filename);
-		printf("[%s\\%s]\n", path, filename);
-
-		debug_print("DEBUG: filename = %s\n", filename);
-		return 1;
-	}
-	else
-		return 0;  // error
-}  // wFsel
-
-
-void RightButton(void)
+func_evnt RightButton(void)
 {
 	if (evnt.mbut & 0x2)
 		BubbleEvnt();
@@ -452,7 +430,7 @@ void main(int argc, char *argv[])
 {
 	WINDOW *win;
 	void   *dial;
-	char   *appName;
+	const char   *appName;
 	int  aesObject
 			,parentBox
 			,buttonbox
