@@ -22,6 +22,7 @@ This file is part of GEMasist.
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <windom.h>
 #include <windom/dfrm.h>
 #include <ezxml.h>

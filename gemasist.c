@@ -68,7 +68,21 @@ struct a_buttonFunc parameters[200];
 //char *filename[256];
 
 
-void wCheck (WINDOW *win, int index, int mode, char* appName)
+void wCheck( WINDOW  *win
+            , int   index
+            , int   mode
+            , char  *appName)
+{
+  if (config == TRUE)
+    makeConfig(appName);
+  else
+	{
+    wExec( appName);
+  }
+}  /* wCheck */
+
+
+void wExec( char  *appName)
 {
 	int	x;
 	char *command;
@@ -77,10 +91,6 @@ void wCheck (WINDOW *win, int index, int mode, char* appName)
 
 	printf("wCheck: app name = %s\n", appName);
 
-	if (config == TRUE)
-		makeConfig(appName);
-	else
-	{
 		debug_print("DEBUG: Execute application\n");
 
 		/* Build up the command parameters */
@@ -118,7 +128,6 @@ void wCheck (WINDOW *win, int index, int mode, char* appName)
 
 	  printf("Executing: [%s]\n", command);
 		system(command);    // pexec (0, appName, command, NULL);
-	}  /* if */
 
 }  /* wCheck */
 
