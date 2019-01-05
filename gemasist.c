@@ -68,28 +68,14 @@ struct a_buttonFunc parameters[200];
 //char *filename[256];
 
 
-void wCheck( WINDOW  *win
-            , int   index
-            , int   mode
-            , char  *appName)
-{
-  if (config == TRUE)
-    makeConfig(appName);
-  else
-	{
-    makeExec( appName);
-  }
-}  /* wCheck */
-
-
-void makeExec( char  *appName)
+void makeExec( char* appName)
 {
 	int	x;
 	char *command;
 	char *temp;
 	char *quote = "\"";
 
-	printf("wCheck: app name = %s\n", appName);
+	printf("makeExec: app name = %s\n", appName);
 
 		debug_print("DEBUG: Execute application\n");
 
@@ -125,11 +111,10 @@ void makeExec( char  *appName)
 			strlcat(command, quote,    MaxStringLen);
 		}
 
-
 	  printf("Executing: [%s]\n", command);
 		system(command);    // pexec (0, appName, command, NULL);
 
-}  /* wCheck */
+}  /* makeExec */
 
 
 void makeConfig(char* appName)
@@ -178,13 +163,29 @@ void makeConfig(char* appName)
 	}  /* if */
 
 	fclose(configFile);
-}
+
+} /* makeonfig */
+
+
+void wCheck( WINDOW* win
+            , int    index
+            , int    mode
+            , char*  appName)
+{
+  if (config == TRUE)
+    makeConfig(appName);
+  else
+	{
+    makeExec(appName);
+  }
+}  /* wCheck */
+
 
 
 /*****************************************************************************/
 void AddTextLabel( void *dial
 									,int  parent
-									,char *obj_label)
+									,const char *obj_label)
 {
   int aesObject;
 
@@ -194,16 +195,16 @@ void AddTextLabel( void *dial
 }  /* AddTextLabel */
 
 
-void AddCheckBox( void    *dial
-                , int     parent
-                , ezxml_t object
-                , char    *obj_label
+void AddCheckBox( void       *dial
+                , int        parent
+                , ezxml_t    object
+                , const char *obj_label
                 )
 {
 	const char    *obj_status;
 
 	int	    check_box;
-	ezxml_t Xml_option;
+	ezxml_t xmlOption;
 	char    *parameter[MaxStringLen];
 
 	obj_status = ezxml_attr(object, "status");
@@ -222,8 +223,9 @@ void AddCheckBox( void    *dial
 	dfrm_add( dial, parent, check_box, 0, -1, DIR_VERT);				/* 3. horizontaly aligned in invisible box */
 
 	/* Get the "value" associated with the check box */
-	Xml_option = ezxml_child(object, "option");
-	strlcpy (*parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
+	xmlOption = ezxml_child(object, "option");
+	strlcpy (*parameter, ezxml_attr(xmlOption, "value"), MaxStringLen);
+  debug_print ("value=[%s]\n", parameter);
 
 	parameters[paramCounter].param = (char*)malloc(sizeof(char*) * MaxStringLen);
 	strlcpy(parameters[paramCounter].param, *parameter, MaxStringLen);
@@ -233,10 +235,10 @@ void AddCheckBox( void    *dial
 
 
 	/* Get the "filename" associated with the  check box */
-	Xml_option = ezxml_child(object, "filename");
-	if (Xml_option)
+	xmlOption = ezxml_child(object, "filename");
+	if (xmlOption)
 	{
-		strlcpy (*parameter, ezxml_attr(Xml_option, "value"), MaxStringLen);
+		strlcpy (*parameter, ezxml_attr(xmlOption, "value"), MaxStringLen);
 		AddFselButton(dial, parent, obj_label);
 	}
 
@@ -244,15 +246,15 @@ void AddCheckBox( void    *dial
 }  /* AddCheckBox */
 
 
-void AddRadioButtons( void   *dial
-										,int     parent
-										,ezxml_t object
-										,const char    *obj_label)
+void AddRadioButtons( void       *dial
+                    , int        parent
+                    , ezxml_t    object
+                    , const char *obj_label)
 {
-	int  radioGroup
-			,radioButtn;
+	int      radioGroup
+			    ,radioButtn;
 	ezxml_t  xmlRadButton;
-	char *parameter[30];
+	char     *parameter[MaxStringLen];
 
 	radioGroup = dfrm_new_tbox( dial, 0, 0, obj_label);			/* create a radio group */
 
@@ -292,9 +294,9 @@ void AddRadioButtons( void   *dial
 }  /* AddRadioButtons */
 
 
-void AddButton(  void *dial
-								,int  parent
-								,char *obj_label)
+void AddButton(  void       *dial
+								,int        parent
+								,const char *obj_label)
 {
 	int aesObject;
 
@@ -306,9 +308,9 @@ void AddButton(  void *dial
 
 
 
-void AddFselButton(  void *dial
-										,int  parent
-										,char *obj_label)
+void AddFselButton(  void       *dial
+										,int        parent
+										,const char *obj_label)
 {
 	int aesObject;
 
@@ -350,7 +352,7 @@ const char* addXmlObjects(	void *dial
 		formType = ezxml_attr(form, "type");
 		if (strcmp("config", formType) == 0)
 		{
-			printf("Type = config file\n");
+			debug_print("Type = config file\n");
 			config = TRUE;
 		}
 

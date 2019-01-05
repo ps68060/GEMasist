@@ -16,7 +16,7 @@ This file is part of GEMasist.
 
 */
 
-extern int  DEBUG_ME;																				/* 1 = debug on */
+extern int  DEBUG_ME;                            /* 1 = debug on */
 
 #define debug_print(fmt, ...) \
   do { if (DEBUG_ME) fprintf(stderr, fmt, ##__VA_ARGS__); } while (0)
@@ -40,20 +40,27 @@ void wCheck( WINDOW *win, int index, int mode, char* appName);
 
 void makeConfig(char* appName);
 
-void AddTextLabel(    void *dial, int parent, char *obj_label);
+void AddTextLabel( void       *dial
+                 , int        parent
+                 , const char *obj_label);
 
 void AddCheckBox( void         *dial
                 , int          parent
                 , ezxml_t      object
-                , char         *obj_label
+                , const char   *obj_label
                 );
 
-void AddFselButton(  void *dial
-										,int  parent
-										,char *obj_label);
+void AddFselButton( void       *dial
+                  , int        parent
+                  , const char *obj_label);
 
-void AddRadioButtons( void *dial, int parent, ezxml_t object, const char *obj_label);
+void AddRadioButtons( void       *dial
+                    , int        parent
+                    , ezxml_t    object
+                    , const char *obj_label);
 
-void AddButton(       void *dial, int parent, char *obj_label);
+void AddButton( void       *dial
+              , int        parent
+              , const char *obj_label);
 
 func_evnt RightButton(void);
