@@ -185,7 +185,7 @@ void wCheck( WINDOW* win
 /*****************************************************************************/
 void AddTextLabel( void *dial
 									,int  parent
-									,const char *obj_label)
+									,char *obj_label)
 {
   int aesObject;
 
@@ -198,14 +198,14 @@ void AddTextLabel( void *dial
 void AddCheckBox( void       *dial
                 , int        parent
                 , ezxml_t    object
-                , const char *obj_label
+                , char *obj_label
                 )
 {
 	const char    *obj_status;
 
 	int	    check_box;
 	ezxml_t xmlOption;
-	char    *parameter[MaxStringLen];
+	char    *parameter[30];
 
 	obj_status = ezxml_attr(object, "status");
 
@@ -225,7 +225,7 @@ void AddCheckBox( void       *dial
 	/* Get the "value" associated with the check box */
 	xmlOption = ezxml_child(object, "option");
 	strlcpy (*parameter, ezxml_attr(xmlOption, "value"), MaxStringLen);
-  debug_print ("value=[%s]\n", parameter);
+  //debug_print ("value=[%s]\n", *parameter);
 
 	parameters[paramCounter].param = (char*)malloc(sizeof(char*) * MaxStringLen);
 	strlcpy(parameters[paramCounter].param, *parameter, MaxStringLen);
@@ -254,7 +254,7 @@ void AddRadioButtons( void       *dial
 	int      radioGroup
 			    ,radioButtn;
 	ezxml_t  xmlRadButton;
-	char     *parameter[MaxStringLen];
+	char     *parameter[30];
 
 	radioGroup = dfrm_new_tbox( dial, 0, 0, obj_label);			/* create a radio group */
 
@@ -294,9 +294,9 @@ void AddRadioButtons( void       *dial
 }  /* AddRadioButtons */
 
 
-void AddButton(  void       *dial
-								,int        parent
-								,const char *obj_label)
+void AddButton( void       *dial
+              , int        parent
+              , char *obj_label)
 {
 	int aesObject;
 
@@ -310,7 +310,7 @@ void AddButton(  void       *dial
 
 void AddFselButton(  void       *dial
 										,int        parent
-										,const char *obj_label)
+										,char *obj_label)
 {
 	int aesObject;
 
@@ -327,8 +327,8 @@ void AddFselButton(  void       *dial
 
 
 
-const char* addXmlObjects(	void *dial
-										, int   parent)
+const char* addXmlObjects( void  *dial
+                         , int   parent)
 {/* add xml objects to form */
 
 	const char *formType

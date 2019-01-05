@@ -42,17 +42,13 @@ void makeConfig(char* appName);
 
 void AddTextLabel( void       *dial
                  , int        parent
-                 , const char *obj_label);
+                 , char *obj_label);
 
 void AddCheckBox( void         *dial
                 , int          parent
                 , ezxml_t      object
-                , const char   *obj_label
+                , char   *obj_label
                 );
-
-void AddFselButton( void       *dial
-                  , int        parent
-                  , const char *obj_label);
 
 void AddRadioButtons( void       *dial
                     , int        parent
@@ -61,6 +57,10 @@ void AddRadioButtons( void       *dial
 
 void AddButton( void       *dial
               , int        parent
-              , const char *obj_label);
+              , char *obj_label);
+
+void AddFselButton( void       *dial
+                  , int        parent
+                  , char *obj_label);
 
 func_evnt RightButton(void);
