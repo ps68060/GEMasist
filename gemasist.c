@@ -77,12 +77,12 @@ void wCheck( WINDOW  *win
     makeConfig(appName);
   else
 	{
-    wExec( appName);
+    makeExec( appName);
   }
 }  /* wCheck */
 
 
-void wExec( char  *appName)
+void makeExec( char  *appName)
 {
 	int	x;
 	char *command;
