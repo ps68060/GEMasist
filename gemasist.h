@@ -21,6 +21,8 @@ extern int  DEBUG_ME;																				/* 1 = debug on */
 #define debug_print(fmt, ...) \
   do { if (DEBUG_ME) fprintf(stderr, fmt, ##__VA_ARGS__); } while (0)
 
+extern ezxml_t layout;
+
 
 struct a_buttonFunc
 {

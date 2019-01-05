@@ -51,6 +51,16 @@ void winfo( WINDOW *win
 }  // wInfo
 
 
+void wClose( WINDOW *win
+           , int    index)
+{
+	ezxml_free(layout);
+	BubbleFree();
+	ObjcChange( OC_FORM, win, index, NORMAL, TRUE);
+	ApplWrite( _AESapid, AP_TERM, 0, 0, 0, 0, 0);
+}  // wClose
+
+
 int wFsel(  WINDOW *win
           , int    index
           , char   *filename)

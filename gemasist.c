@@ -51,7 +51,6 @@ This file is part of GEMasist.
 static int MaxStringLen = 200;
 static int MaxPathLen   = 256;
 
-ezxml_t layout;
 int 		radGrpCounter = 0
 			 ,checkBoxSelected[100]
 			 ,paramCounter
@@ -62,13 +61,14 @@ int DEBUG_ME = 1;                                /* extern */
 #define debug_print(fmt, ...) \
   do { if (DEBUG_ME) fprintf(stderr, fmt, ##__VA_ARGS__); } while (0)
 
+ezxml_t layout;
 
 struct a_buttonFunc parameters[200];
 
 //char *filename[256];
 
 
-void wCheck(WINDOW *win, int index, int mode, char* appName)
+void wCheck (WINDOW *win, int index, int mode, char* appName)
 {
 	int	x;
 	char *command;
@@ -121,16 +121,6 @@ void wCheck(WINDOW *win, int index, int mode, char* appName)
 	}  /* if */
 
 }  /* wCheck */
-
-
-void wClose(	WINDOW *win
-						, int    index)
-{
-	ezxml_free(layout);
-	BubbleFree();
-	ObjcChange( OC_FORM, win, index, NORMAL, TRUE);
-	ApplWrite( _AESapid, AP_TERM, 0, 0, 0, 0, 0);
-}  // wClose
 
 
 void makeConfig(char* appName)
